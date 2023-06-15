@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from database_config import engine, Base
+from database_config import get_db
+import models
 
 app = FastAPI()
 
@@ -19,4 +22,8 @@ async def ping():
     return {"message": "Hello World"}
 
 
-Base.metadata.create_all(engine)
+@app.get("/users", status_code=status.HTTP_201_CREATED)
+async def get_users_list(session: AsyncSession = Depends(get_db)):
+    users_list = await session.execute(
+        select(models.User))
+    return users_list.scalars().all()

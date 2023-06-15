@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    container_name: "postgres_db"
+    container_name: "db"
     image: postgres
     restart: always
     expose:
@@ -12,7 +12,7 @@ services:
     environment:
       POSTGRES_PASSWORD: "123"
       POSTGRES_USER: "postgres"
-      POSTGRES_DB: "users_db"
+      POSTGRES_DB: "usersmicroservice"
 
   adminer:
     container_name: adminer
