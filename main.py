@@ -27,7 +27,7 @@ async def ping():
     return {"message": "Hello World"}
 
 
-@app.get("/users", status_code=status.HTTP_201_CREATED, response_model=list[UserSchema])
+@app.get("/users", status_code=status.HTTP_200_OK, response_model=list[UserSchema])
 async def get_users_list(session: AsyncSession = Depends(get_db)):
     users_list = await session.execute(
         select(models.User))
@@ -69,7 +69,7 @@ async def update_user(user_id: UUID, user_data: UserCreateSchema, session: Async
     return user
 
 
-@app.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/users/{user_id}", status_code=status.HTTP_200_OK)
 async def delete_user(user_id: UUID, session: AsyncSession = Depends(get_db)):
     user = await session.get(models.User, user_id)
     if user is None:
