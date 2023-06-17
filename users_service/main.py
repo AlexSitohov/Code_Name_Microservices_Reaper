@@ -24,7 +24,7 @@ app.add_middleware(
 
 @app.get("/")
 async def ping():
-    return {"message": "Hello World"}
+    return {"message": "Hello World. This is users microservice"}
 
 
 @app.get("/users", status_code=status.HTTP_200_OK, response_model=list[UserSchema])
