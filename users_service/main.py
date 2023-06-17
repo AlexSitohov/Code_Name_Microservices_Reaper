@@ -11,7 +11,7 @@ from hash import hash_password
 
 import models
 
-app = FastAPI()
+app = FastAPI(title='users')
 
 app.add_middleware(
     CORSMiddleware,
