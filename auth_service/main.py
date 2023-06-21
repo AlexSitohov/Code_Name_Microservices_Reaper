@@ -1,9 +1,10 @@
-from fastapi import FastAPI, status, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import BaseModel
+import aiohttp
 
-from auth_service.JWT import create_access_token, get_current_user
+from JWT import create_access_token, get_current_user
+from hash import verify_password
 
 app = FastAPI(title='auth')
 
@@ -28,11 +29,20 @@ async def auth_ping(current_user=Depends(get_current_user)):
 
 @app.post("/login")
 async def login(login_data: OAuth2PasswordRequestForm = Depends()):
-    # Проверка правильности введенных данных пользователя
-    if not login_data.username == "myuser" and login_data.password == "mypassword":
+    username = login_data.username
+    password = login_data.password
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f'http://localhost/users/username/{username}') as response:
+            result = await response.json()
+    user_id = result.get('id')
+    user_username = result.get('username')
+    user_password = result.get('password')
+
+    if not username == user_username or not await verify_password(password, user_password):
         raise HTTPException(status_code=400, detail="Неправильный логин или пароль")
-    access_token = create_access_token(data={'user_id': '123',
-                                             'username': login_data.username,
+
+    access_token = create_access_token(data={'user_id': user_id,
+                                             'username': user_username,
                                              })
 
     return {"access_token": access_token, "token_type": "bearer"}

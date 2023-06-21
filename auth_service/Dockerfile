@@ -1,6 +1,6 @@
-FROM python:3.11.2
+FROM python:alpine
 
-WORKDIR /users
+WORKDIR /auth
 
 COPY .. .
 

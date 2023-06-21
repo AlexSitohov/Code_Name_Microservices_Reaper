@@ -42,6 +42,18 @@ async def get_user(user_id: UUID, session: AsyncSession = Depends(get_db)):
     return user
 
 
+@app.get("/users/username/{username}", status_code=status.HTTP_200_OK)
+async def get_user_by_username(username: str, session: AsyncSession = Depends(get_db)):
+    query = select(models.User).where(models.User.username == username)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    return user
+
+
 @app.post("/users", status_code=status.HTTP_201_CREATED)
 async def create_user(user_data: UserCreateSchema, session: AsyncSession = Depends(get_db)):
     user_data.password = await hash_password(user_data.password)
