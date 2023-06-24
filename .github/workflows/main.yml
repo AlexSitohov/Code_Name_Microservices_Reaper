@@ -14,8 +14,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build_user
-        run: docker-compose up -f users_service/docker-compose.yml -d --build
+        run: docker-compose up -f users_service/docker-compose.yml -d --build --force-recreate
       - name: Build_auth
-        run: docker-compose up -f auth_service/docker-compose.yml -d --build
+        run: docker-compose up -f auth_service/docker-compose.yml -d --build --force-recreate
 
 
