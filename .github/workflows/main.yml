@@ -23,7 +23,7 @@ jobs:
         run: docker volume rm $(docker volume ls | grep users_ | awk '{print $2}') || true
 
       - name: Build_users
-        run: docker-compose up -p users -f users_service/docker-compose.yml -d
+        run: docker-compose -p users -f users_service/docker-compose.yml up -d
 
       - name: Stop_old_auth_constainers
         run: docker stop $(docker ps -a | grep auth_ | awk '{print $1}') || true
@@ -35,6 +35,6 @@ jobs:
         run: docker volume rm $(docker volume ls | grep auth_ | awk '{print $2}') || true
 
       - name: Build_auth
-        run: docker-compose up -f -p auth auth_service/docker-compose.yml -d
+        run: docker-compose -p auth -f auth_service/docker-compose.yml up -d
 
 
