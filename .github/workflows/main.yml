@@ -13,9 +13,28 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build_user
-        run: docker-compose up -f users_service/docker-compose.yml -d --build --force-recreate
+      - name: Stop_old_users_constainers
+        run: docker stop $(docker ps -a | grep users_ | awk '{print $1}') || true
+
+      - name: Remove_old_users_constainers
+        run: docker rm $(docker ps -a | grep users_ | awk '{print $1}') || true
+
+      - name: Remove_old_users_volumes
+        run: docker volume rm $(docker volume ls | grep users_ | awk '{print $2}') || true
+
+      - name: Build_users
+        run: docker-compose up -p users -f users_service/docker-compose.yml -d
+
+      - name: Stop_old_auth_constainers
+        run: docker stop $(docker ps -a | grep auth_ | awk '{print $1}') || true
+
+      - name: Remove_old_auth_constainers
+        run: docker rm $(docker ps -a | grep auth_ | awk '{print $1}') || true
+
+      - name: Remove_old_auth_volumes
+        run: docker volume rm $(docker volume ls | grep auth_ | awk '{print $2}') || true
+
       - name: Build_auth
-        run: docker-compose up -f auth_service/docker-compose.yml -d --build --force-recreate
+        run: docker-compose up -f -p auth auth_service/docker-compose.yml -d
 
 
