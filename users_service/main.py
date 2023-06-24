@@ -4,6 +4,8 @@ from fastapi import FastAPI, status, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from verify_token import get_current_user
+
 
 from database_config import get_db
 from schemas import UserSchema, UserCreateSchema
@@ -25,6 +27,11 @@ app.add_middleware(
 @app.get("/")
 async def ping():
     return {"message": "Hello World. This is users microservice"}
+
+
+@app.get("/auth_ping")
+async def auth_ping(current_user=Depends(get_current_user)):
+    return {"message": "Hello. You have successfully authenticated."}
 
 
 @app.get("/users", status_code=status.HTTP_200_OK, response_model=list[UserSchema])
