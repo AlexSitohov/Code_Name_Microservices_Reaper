@@ -1,0 +1,21 @@
+name: Check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  docker_compose:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build_user
+        run: docker-compose -f users_service/docker-compose.yml -d --build 
+      - name: Build_auth
+        run: docker-compose -f auth_service/docker-compose.yml -d --build
+
+
