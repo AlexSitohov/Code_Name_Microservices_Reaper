@@ -52,6 +52,6 @@ jobs:
       - name: Remove_old_api_gateway_volumes
         run: docker volume rm $(docker volume ls | grep api_gateway_ | awk '{print $2}') || true
 
-      - name: Build_auth
+      - name: Build_api_gateway
         run: docker-compose -p api_gateway -f api_gateway/docker-compose.yml up -d --build
 

@@ -2,11 +2,20 @@ from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from httpx import AsyncClient
+from fastapi.middleware.cors import CORSMiddleware
 
 import schemas
 from verify_token import get_current_user
 
 app = FastAPI(title='api_gateway')
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 
 @app.get("/api/users/ping")
