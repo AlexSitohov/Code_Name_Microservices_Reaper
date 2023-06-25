@@ -7,3 +7,7 @@ These microservices interact with each other through API calls, which helps main
 This project has been a great opportunity for me to learn about microservices architecture for the first time and see how it can benefit large-scale projects, 
 as well as become familiar with some important tools such as Docker, Docker Compose, and FastAPI. Through this project, 
 I have gained valuable insights into the development process and the modern technologies that are used to deliver complex applications in a scalable and efficient way.
+
+Now the project structure looks like this:
+![image](https://github.com/AlexSitohov/Code_Name_Microservices_Reaper/assets/101973205/1a42dc05-2f86-425a-a924-66953c6edc06)
+ 
