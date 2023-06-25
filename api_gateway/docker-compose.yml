@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  web_auth:
+  web_api_gateway:
     container_name: api_gateway_app
     build:
       context: .
