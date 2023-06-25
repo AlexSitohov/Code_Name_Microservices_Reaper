@@ -24,7 +24,8 @@ async def ping():
 
 @app.get("/auth_ping")
 async def auth_ping(current_user=Depends(get_current_user)):
-    return {"message": "Hello. You have successfully authenticated."}
+    username = current_user.get('username')
+    return {"message": f"Hello {username}. You have successfully authenticated."}
 
 
 @app.post("/login")

@@ -1,0 +1,8 @@
+aiohttp
+fastapi
+uvicorn
+jose
+passlib
+bcrypt
+python-jose
+python-multipart
