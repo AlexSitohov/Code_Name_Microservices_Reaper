@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
-import aiohttp
+from httpx import AsyncClient
 
 from JWT import create_access_token, get_current_user
 from hash import verify_password
@@ -25,16 +25,17 @@ async def ping():
 @app.get("/auth_ping")
 async def auth_ping(current_user=Depends(get_current_user)):
     username = current_user.get('username')
-    return {"message": f"Hello {username}. You have successfully authenticated."}
+    user_id = current_user.get('user_id')
+    return {"message": f"Hello {username}. Your id is {user_id}. You have successfully authenticated."}
 
 
 @app.post("/login")
 async def login(login_data: OAuth2PasswordRequestForm = Depends()):
     username = login_data.username
     password = login_data.password
-    async with aiohttp.ClientSession() as session:
-        async with session.get(f'http://31.129.97.191:82/users/username/{username}') as response:
-            result = await response.json()
+    async with AsyncClient() as client:
+        response = await client.get(f"http://31.129.97.191:82/users/username/{username}")
+        result = await response.json()
     user_id = result.get('id')
     user_username = result.get('username')
     user_password = result.get('password')
