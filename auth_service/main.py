@@ -35,7 +35,7 @@ async def login(login_data: OAuth2PasswordRequestForm = Depends()):
     password = login_data.password
     async with AsyncClient() as client:
         response = await client.get(f"http://31.129.97.191:82/users/username/{username}")
-        result = await response.json()
+        result = response.json()
     user_id = result.get('id')
     user_username = result.get('username')
     user_password = result.get('password')
