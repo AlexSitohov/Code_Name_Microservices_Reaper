@@ -21,7 +21,7 @@ app.add_middleware(
 @app.get("/api/users/ping")
 async def gateway_users_ping(request: Request):
     async with AsyncClient() as client:
-        response = await client.get("http://31.129.97.191/")
+        response = await client.get("http://31.129.97.191:82/")
         if response.status_code == 200:
             return response.json()
         raise HTTPException(status_code=response.status_code, detail=response.text)
@@ -30,7 +30,7 @@ async def gateway_users_ping(request: Request):
 @app.get("/api/users")
 async def gateway_get_users_list(request: Request):
     async with AsyncClient() as client:
-        response = await client.get("http://31.129.97.191/users")
+        response = await client.get("http://31.129.97.191:82/users")
         if response.status_code == 200:
             return response.json()
         raise HTTPException(status_code=response.status_code, detail=response.text)
@@ -40,7 +40,7 @@ async def gateway_get_users_list(request: Request):
 async def gateway_create_user(user_data: schemas.UserCreateSchema):
     try:
         async with AsyncClient() as client:
-            response = await client.post("http://31.129.97.191/users", json=user_data.dict())
+            response = await client.post("http://31.129.97.191:82/users", json=user_data.dict())
             json_data = response.json()
             return JSONResponse(content=json_data)
     except:
