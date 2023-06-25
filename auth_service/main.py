@@ -33,7 +33,7 @@ async def login(login_data: OAuth2PasswordRequestForm = Depends()):
     username = login_data.username
     password = login_data.password
     async with aiohttp.ClientSession() as session:
-        async with session.get(f'http://31.129.97.191/users/username/{username}') as response:
+        async with session.get(f'http://31.129.97.191:82/users/username/{username}') as response:
             result = await response.json()
     user_id = result.get('id')
     user_username = result.get('username')
