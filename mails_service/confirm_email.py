@@ -11,12 +11,15 @@ SMTP_PASSWORD = SMTP_PASSWORD
 
 
 async def send_email(username, user_email, verify_token):
-    email = await create_email_template(username, user_email, verify_token)
+    try:
+        email = await create_email_template(username, user_email, verify_token)
 
-    smtp_server = smtplib.SMTP(host=SMTP_HOST, port=SMTP_PORT)
-    smtp_server.starttls()
-    smtp_server.login(SMTP_USER, SMTP_PASSWORD)
-    smtp_server.send_message(email)
+        smtp_server = smtplib.SMTP(host=SMTP_HOST, port=SMTP_PORT)
+        smtp_server.starttls()
+        smtp_server.login(SMTP_USER, SMTP_PASSWORD)
+        smtp_server.send_message(email)
+    except Exception:
+        pass
 
 
 async def create_email_template(username, user_email, verify_token):
