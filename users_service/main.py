@@ -1,11 +1,15 @@
+import hashlib
+from datetime import datetime
+from random import randbytes
 from uuid import UUID
 
 from fastapi import FastAPI, status, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from verify_token import get_current_user
 
+from rabbit_mq.publisher import publish_email_data
+from verify_token import get_current_user
 
 from database_config import get_db
 from schemas import UserSchema, UserCreateSchema
@@ -65,9 +69,17 @@ async def get_user_by_username(username: str, session: AsyncSession = Depends(ge
 async def create_user(user_data: UserCreateSchema, session: AsyncSession = Depends(get_db)):
     user_data.password = await hash_password(user_data.password)
     new_user = models.User(**user_data.dict())
+
+    token = randbytes(5)
+    hashed_code = hashlib.sha256()
+    hashed_code.update(token)
+    verification_code = hashed_code.hexdigest()
+    new_user.verification_token = verification_code
     session.add(new_user)
     await session.commit()
     await session.refresh(new_user)
+
+    await publish_email_data(f"{new_user.username}:{new_user.email}:{new_user.verification_token}")
     return new_user
 
 
@@ -97,3 +109,21 @@ async def delete_user(user_id: UUID, session: AsyncSession = Depends(get_db)):
     await session.delete(user)
     await session.commit()
     return "deleted"
+
+
+@app.put('/verify-email')
+async def verify_me(data: dict, current_user=Depends(get_current_user), session: AsyncSession = Depends(get_db)):
+    user_id = current_user.get('user_id')
+    user = await session.get(models.User, user_id)
+
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    if user.verification_token == data.get('verification_token'):
+        user.verification_token = None
+        user.email_confirmed = True
+        user.email_confirmed_date_time = datetime.utcnow()
+        await session.commit()
+        await session.refresh(user)
+        return {"message": "Почта успешно подтверждена"}
+    return {"message": "Нет доступа"}

@@ -13,6 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      # users
+
       - name: Stop_old_users_constainers
         run: docker stop $(docker ps -a | grep users_ | awk '{print $1}') || true
 
@@ -28,6 +30,7 @@ jobs:
       - name: Alembic_migration
         run: docker exec users_app alembic upgrade head
 
+      # auth
 
       - name: Stop_old_auth_constainers
         run: docker stop $(docker ps -a | grep auth_ | awk '{print $1}') || true
@@ -41,7 +44,7 @@ jobs:
       - name: Build_auth
         run: docker-compose -p auth -f auth_service/docker-compose.yml up -d --build
 
-
+      # api gateway
 
       - name: Stop_old_api_gateway_constainers
         run: docker stop $(docker ps -a | grep api_gateway_ | awk '{print $1}') || true
@@ -55,3 +58,19 @@ jobs:
       - name: Build_api_gateway
         run: docker-compose -p api_gateway -f api_gateway/docker-compose.yml up -d --build
 
+      # mails
+
+      - name: Stop_old_mails_constainers
+        run: docker stop $(docker ps -a | grep mails_ | awk '{print $1}') || true
+
+      - name: Remove_old_mails_constainers
+        run: docker rm $(docker ps -a | grep mails_ | awk '{print $1}') || true
+
+      - name: Remove_old_mails_volumes
+        run: docker volume rm $(docker volume ls | grep mails_ | awk '{print $2}') || true
+
+      - name: Build_mails
+        run: docker-compose -p mails -f mails_service/docker-compose.yml up -d --build
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}

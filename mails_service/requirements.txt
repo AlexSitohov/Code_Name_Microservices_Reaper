@@ -1,0 +1,6 @@
+passlib
+bcrypt
+python-multipart
+httpx
+aio_pika
+python-dotenv
