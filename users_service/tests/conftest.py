@@ -14,7 +14,7 @@ from models import Base
 from main import app
 
 # DATABASE
-SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://postgres:123@test_db:5433/usersmicroservice_test"
+SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://postgres:123@db_test/usersmicroservice_test"
 
 engine_test = create_async_engine(SQLALCHEMY_DATABASE_URL, poolclass=NullPool)
 async_session_maker = sessionmaker(engine_test, class_=AsyncSession, expire_on_commit=False)

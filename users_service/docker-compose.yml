@@ -14,18 +14,18 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_DB: "usersmicroservice"
 
-  test_db:
+  db_test:
     container_name: users_db_test
     image: postgres
     restart: always
-    environment:
-      POSTGRES_PASSWORD: "123"
-      POSTGRES_USER: "postgres"
-      POSTGRES_DB: "usersmicroservice_test"
     expose:
       - 5433
     ports:
       - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: "123"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "usersmicroservice_test"
 
   adminer:
     container_name: users_adminer
@@ -45,3 +45,4 @@ services:
       - RABBIT_MQ_ADDRESS=$RABBIT_MQ_ADDRESS
     depends_on:
       - db
+      - db_test
