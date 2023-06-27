@@ -35,3 +35,8 @@ class Login(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class VerifyEmailCode(BaseModel):
+    verification_token: str
+

@@ -12,7 +12,7 @@ from rabbit_mq.publisher import publish_email_data
 from verify_token import get_current_user
 
 from database_config import get_db
-from schemas import UserSchema, UserCreateSchema
+from schemas import UserSchema, UserCreateSchema, VerifyEmailCode
 from hash import hash_password
 
 import models
@@ -112,7 +112,7 @@ async def delete_user(user_id: UUID, session: AsyncSession = Depends(get_db)):
 
 
 @app.put('/verify-email')
-async def verify_me(data: dict, current_user=Depends(get_current_user), session: AsyncSession = Depends(get_db)):
+async def verify_me(data: VerifyEmailCode, current_user=Depends(get_current_user), session: AsyncSession = Depends(get_db)):
     user_id = current_user.get('user_id')
     user = await session.get(models.User, user_id)
 

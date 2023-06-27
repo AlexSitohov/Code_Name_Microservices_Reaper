@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request, HTTPException, Depends
 from httpx import AsyncClient
 from fastapi.responses import JSONResponse
 
 import schemas
+from verify_token import get_current_user
 
 router = APIRouter(tags=['users'])
 
@@ -30,6 +31,18 @@ async def gateway_create_user(user_data: schemas.UserCreateSchema):
     try:
         async with AsyncClient() as client:
             response = await client.post("http://31.129.97.191:82/users", json=user_data.dict())
+            json_data = response.json()
+            return JSONResponse(content=json_data)
+    except:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
+@router.post("/api/verify-email")
+async def gateway_verify_email(data: schemas.VerifyEmailCode, request: Request, current_user=Depends(get_current_user)):
+    try:
+        async with AsyncClient() as client:
+            response = await client.put("http://31.129.97.191:82/verify-email", json=data.dict(),
+                                        headers={'Authorization': request.headers.get('Authorization')})
             json_data = response.json()
             return JSONResponse(content=json_data)
     except:
