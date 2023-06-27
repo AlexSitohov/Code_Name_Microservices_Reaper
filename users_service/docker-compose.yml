@@ -14,6 +14,19 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_DB: "usersmicroservice"
 
+  test_db:
+    container_name: users_db_test
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "123"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "usersmicroservice_test"
+    expose:
+      - 5433
+    ports:
+      - "5433:5432"
+
   adminer:
     container_name: users_adminer
     image: adminer

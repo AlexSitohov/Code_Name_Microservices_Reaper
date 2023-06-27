@@ -32,6 +32,9 @@ jobs:
       - name: Alembic_migration
         run: docker exec users_app alembic upgrade head
 
+      - name: Run_users_tests
+        run: docker exec users_app pytest
+
       # auth
 
       - name: Stop_old_auth_constainers

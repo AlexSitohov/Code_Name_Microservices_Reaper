@@ -28,12 +28,12 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+@app.get("/", status_code=status.HTTP_200_OK)
 async def ping():
     return {"message": "Hello World. This is users microservice"}
 
 
-@app.get("/auth_ping")
+@app.get("/auth_ping", status_code=status.HTTP_200_OK)
 async def auth_ping(current_user=Depends(get_current_user)):
     return {"message": "Hello. You have successfully authenticated."}
 
@@ -111,7 +111,7 @@ async def delete_user(user_id: UUID, session: AsyncSession = Depends(get_db)):
     return "deleted"
 
 
-@app.put('/verify-email')
+@app.put('/verify-email', status_code=status.HTTP_200_OK)
 async def verify_me(data: VerifyEmailCode, current_user=Depends(get_current_user),
                     session: AsyncSession = Depends(get_db)):
     user_id = current_user.get('user_id')
