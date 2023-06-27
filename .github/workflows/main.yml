@@ -26,11 +26,11 @@ jobs:
 
       - name: Build_users
         run: docker-compose -p users -f users_service/docker-compose.yml up -d --build
+        env:
+          RABBIT_MQ_ADDRESS: ${{ secrets.RABBIT_MQ_ADDRESS }}
 
       - name: Alembic_migration
         run: docker exec users_app alembic upgrade head
-        env:
-          RABBIT_MQ_ADDRESS: ${{ secrets.RABBIT_MQ_ADDRESS }}
 
       # auth
 
