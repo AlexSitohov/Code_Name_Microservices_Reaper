@@ -4,7 +4,9 @@ from jose import jwt, JWTError
 
 SECRET_KEY = '09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7'
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 3
+
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login", scheme_name="JWT")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login", scheme_name="JWT")
 
@@ -13,11 +15,11 @@ def verify_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id: id = payload.get('user_id')
-        user_email: str = payload.get('user_email')
+        username: str = payload.get('username')
 
         if user_id is None:
             raise credentials_exception
-        token_data = {'user_id': user_id, 'user_email': user_email}
+        token_data = {'user_id': user_id, 'username': username}
         return token_data
     except JWTError:
         raise credentials_exception
