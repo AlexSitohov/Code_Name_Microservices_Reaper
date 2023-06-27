@@ -2,11 +2,11 @@ import asyncio
 
 import aio_pika
 
+from users_service_config import RABBIT_MQ_ADDRESS
+
 
 async def publish_email_data(email) -> None:
-    connection = await aio_pika.connect_robust(
-        "amqps://nuzlkbxa:hgvTbt9REcgTejxLf1DPNafsfB0icCmm@stingray.rmq.cloudamqp.com/nuzlkbxa",
-    )
+    connection = await aio_pika.connect_robust(RABBIT_MQ_ADDRESS, )
 
     async with connection:
         routing_key = "mails_queue"

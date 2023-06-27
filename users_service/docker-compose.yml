@@ -28,5 +28,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "82:8080"
+    environment:
+      - RABBIT_MQ_ADDRESS=$RABBIT_MQ_ADDRESS
     depends_on:
       - db

@@ -4,11 +4,11 @@ import aio_pika
 
 from confirm_email import send_email
 
+from mail_service_config import RABBIT_MQ_ADDRESS
+
 
 async def main() -> None:
-    connection = await aio_pika.connect_robust(
-        "amqps://nuzlkbxa:hgvTbt9REcgTejxLf1DPNafsfB0icCmm@stingray.rmq.cloudamqp.com/nuzlkbxa",
-    )
+    connection = await aio_pika.connect_robust(RABBIT_MQ_ADDRESS, )
 
     queue_name = "mails_queue"
 

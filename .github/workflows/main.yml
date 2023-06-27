@@ -29,6 +29,8 @@ jobs:
 
       - name: Alembic_migration
         run: docker exec users_app alembic upgrade head
+        env:
+          RABBIT_MQ_ADDRESS: ${{ secrets.RABBIT_MQ_ADDRESS }}
 
       # auth
 
@@ -74,3 +76,4 @@ jobs:
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          RABBIT_MQ_ADDRESS: ${{ secrets.RABBIT_MQ_ADDRESS }}

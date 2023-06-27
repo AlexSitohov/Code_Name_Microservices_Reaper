@@ -11,4 +11,5 @@ services:
     environment:
       - SMTP_USER=$SMTP_USER
       - SMTP_PASSWORD=$SMTP_PASSWORD
+      - RABBIT_MQ_ADDRESS=$RABBIT_MQ_ADDRESS
 

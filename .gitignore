@@ -24,4 +24,7 @@ archive.zip
 # vim temporary files
 *~
 .*.sw?
+
+#.env
 mails_service/.env
+users_service/.env
