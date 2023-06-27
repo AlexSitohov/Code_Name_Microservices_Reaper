@@ -9,5 +9,10 @@ as well as become familiar with some important tools such as Docker, Docker Comp
 I have gained valuable insights into the development process and the modern technologies that are used to deliver complex applications in a scalable and efficient way.
 
 Now the project structure looks like this:
+v1
 ![image](https://github.com/AlexSitohov/Code_Name_Microservices_Reaper/assets/101973205/1a42dc05-2f86-425a-a924-66953c6edc06)
- 
+
+
+v2
+![image](https://github.com/AlexSitohov/Code_Name_Microservices_Reaper/assets/101973205/9ab687ed-7431-41a4-a13f-825443cab5a3)
+
