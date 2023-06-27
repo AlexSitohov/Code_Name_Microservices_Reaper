@@ -53,7 +53,7 @@ async def get_user(user_id: UUID, session: AsyncSession = Depends(get_db)):
     return user
 
 
-@app.get("/users/username/{username}", status_code=status.HTTP_200_OK)
+@app.get("/users/username/{username}", status_code=status.HTTP_200_OK, response_model=UserSchema)
 async def get_user_by_username(username: str, session: AsyncSession = Depends(get_db)):
     query = select(models.User).where(models.User.username == username)
     result = await session.execute(query)
@@ -65,7 +65,7 @@ async def get_user_by_username(username: str, session: AsyncSession = Depends(ge
     return user
 
 
-@app.post("/users", status_code=status.HTTP_201_CREATED)
+@app.post("/users", status_code=status.HTTP_201_CREATED, response_model=UserSchema)
 async def create_user(user_data: UserCreateSchema, session: AsyncSession = Depends(get_db)):
     user_data.password = await hash_password(user_data.password)
     new_user = models.User(**user_data.dict())
@@ -112,14 +112,15 @@ async def delete_user(user_id: UUID, session: AsyncSession = Depends(get_db)):
 
 
 @app.put('/verify-email')
-async def verify_me(data: VerifyEmailCode, current_user=Depends(get_current_user), session: AsyncSession = Depends(get_db)):
+async def verify_me(data: VerifyEmailCode, current_user=Depends(get_current_user),
+                    session: AsyncSession = Depends(get_db)):
     user_id = current_user.get('user_id')
     user = await session.get(models.User, user_id)
 
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-    if user.verification_token == data.get('verification_token'):
+    if user.verification_token == data.verification_token:
         user.verification_token = None
         user.email_confirmed = True
         user.email_confirmed_date_time = datetime.utcnow()

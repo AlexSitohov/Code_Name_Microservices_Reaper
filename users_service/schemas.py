@@ -14,7 +14,6 @@ class UserSchema(BaseModel):
     phone: str
     city: str
     email_confirmed: bool
-    email_confirmed_date_time: datetime
 
     class Config:
         orm_mode = True
@@ -35,3 +34,6 @@ class UserCreateSchema(BaseModel):
 
 class VerifyEmailCode(BaseModel):
     verification_token: str
+
+    class Config:
+        orm_mode = True
