@@ -65,20 +65,23 @@ async def get_user_by_username(username: str, session: AsyncSession = Depends(ge
     return user
 
 
-@app.post("/users", status_code=status.HTTP_201_CREATED, response_model=UserSchema)
-async def create_user(user_data: UserCreateSchema, session: AsyncSession = Depends(get_db)):
-    user_data.password = await hash_password(user_data.password)
-    new_user = models.User(**user_data.dict())
-
+async def crate_verification_code():
     token = randbytes(5)
     hashed_code = hashlib.sha256()
     hashed_code.update(token)
     verification_code = hashed_code.hexdigest()
-    new_user.verification_token = verification_code
+    return verification_code
+
+
+@app.post("/users", status_code=status.HTTP_201_CREATED, response_model=UserSchema)
+async def create_user(user_data: UserCreateSchema, session: AsyncSession = Depends(get_db)):
+    user_data.password = await hash_password(user_data.password)
+    new_user = models.User(**user_data.dict())
+    new_user.verification_token = await crate_verification_code()
     session.add(new_user)
+
     await session.commit()
     await session.refresh(new_user)
-
     await publish_email_data(f"{new_user.username}:{new_user.email}:{new_user.verification_token}")
     return new_user
 
@@ -88,15 +91,16 @@ async def update_user(user_id: UUID, user_data: UserCreateSchema, session: Async
     user = await session.get(models.User, user_id)
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-
     user_data.password = await hash_password(user_data.password)
     user_data_dict = user_data.dict(exclude_unset=True)
     for field, value in user_data_dict.items():
         setattr(user, field, value)
-
+    user.verification_token = await crate_verification_code()
     session.add(user)
+
     await session.commit()
     await session.refresh(user)
+    await publish_email_data(f"{user.username}:{user.email}:{user.verification_token}")
     return user
 
 
