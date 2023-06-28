@@ -11,6 +11,7 @@ class UserSchema(BaseModel):
     last_name: str
     password: str
     email: EmailStr
+    phone: str
     city: str
     email_confirmed: bool
 
