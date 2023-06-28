@@ -18,7 +18,7 @@ async def test_create_user():
         "first_name": "test_first_name",
         "last_name": "test_last_name",
         "password": "test_password",
-        "email": "test_email@gmail.com",
+        "email": "test@gmail.com",
         "phone": "test_phone_89898988989",
         "city": "test_city_NY"
     }
@@ -27,7 +27,7 @@ async def test_create_user():
     assert response.json().get('username') == 'test_username'
     assert response.json().get('first_name') == 'test_first_name'
     assert response.json().get('last_name') == 'test_last_name'
-    assert response.json().get('email') == 'test_email@gmail.com'
+    assert response.json().get('email') == "test@gmail.com"
     assert response.json().get('phone') == 'test_phone_89898988989'
     assert response.json().get('city') == 'test_city_NY'
 
@@ -38,7 +38,7 @@ async def test_get_users_list():
     assert response.json()[0].get('username') == 'test_username'
     assert response.json()[0].get('first_name') == 'test_first_name'
     assert response.json()[0].get('last_name') == 'test_last_name'
-    assert response.json()[0].get('email') == 'test_email@gmail.com'
+    assert response.json()[0].get('email') == "test@gmail.com"
     assert response.json()[0].get('phone') == 'test_phone_89898988989'
     assert response.json()[0].get('city') == 'test_city_NY'
 
@@ -49,7 +49,7 @@ async def test_get_user_by_username():
     assert response.json().get('username') == 'test_username'
     assert response.json().get('first_name') == 'test_first_name'
     assert response.json().get('last_name') == 'test_last_name'
-    assert response.json().get('email') == 'test_email@gmail.com'
+    assert response.json().get('email') == "test@gmail.com"
     assert response.json().get('phone') == 'test_phone_89898988989'
     assert response.json().get('city') == 'test_city_NY'
 
