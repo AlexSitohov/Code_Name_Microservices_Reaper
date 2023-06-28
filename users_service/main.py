@@ -95,6 +95,8 @@ async def update_user(user_id: UUID, user_data: UserCreateSchema, session: Async
     user_data_dict = user_data.dict(exclude_unset=True)
     for field, value in user_data_dict.items():
         setattr(user, field, value)
+    user.email_confirmed = False
+    user.email_confirmed_date_time = None
     user.verification_token = await crate_verification_code()
     session.add(user)
 
