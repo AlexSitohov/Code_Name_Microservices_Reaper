@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from uuid import UUID
 
 
@@ -10,8 +10,7 @@ class UserSchema(BaseModel):
     first_name: str
     last_name: str
     password: str
-    email: str
-    phone: str
+    email: EmailStr
     city: str
     email_confirmed: bool
 
@@ -24,7 +23,7 @@ class UserCreateSchema(BaseModel):
     first_name: str
     last_name: str
     password: str
-    email: str
+    email: EmailStr
     phone: str
     city: str
 

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from uuid import UUID
 
 
@@ -8,7 +8,7 @@ class UserSchema(BaseModel):
     first_name: str
     last_name: str
     password: str
-    email: str
+    email: EmailStr
     phone: str
     city: str
 
@@ -21,7 +21,7 @@ class UserCreateSchema(BaseModel):
     first_name: str
     last_name: str
     password: str
-    email: str
+    email: EmailStr
     phone: str
     city: str
 
@@ -39,4 +39,3 @@ class Login(BaseModel):
 
 class VerifyEmailCode(BaseModel):
     verification_token: str
-
