@@ -32,6 +32,18 @@ class UserCreateSchema(BaseModel):
         orm_mode = True
 
 
+class UserCreateSchemaWOEmail(BaseModel):
+    username: str
+    first_name: str
+    last_name: str
+    password: str
+    phone: str
+    city: str
+
+    class Config:
+        orm_mode = True
+
+
 class VerifyEmailCode(BaseModel):
     verification_token: str
 
