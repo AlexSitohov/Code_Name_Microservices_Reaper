@@ -2,7 +2,6 @@ import hashlib
 from datetime import datetime
 from random import randbytes
 from uuid import UUID
-from pydantic import EmailStr
 
 from fastapi import FastAPI, status, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,7 +12,7 @@ from rabbit_mq.publisher import publish_email_data
 from verify_token import get_current_user
 
 from database_config import get_db
-from schemas import UserSchema, UserCreateSchema, VerifyEmailCode, UserCreateSchemaWOEmail
+from schemas import UserSchema, UserCreateSchema, VerifyEmailCode, UserCreateSchemaWOEmail, EmailStrSchema
 from hash import hash_password
 
 import models
@@ -88,11 +87,11 @@ async def create_user(user_data: UserCreateSchema, session: AsyncSession = Depen
 
 
 @app.put('/users/update/email/{user_id}', status_code=status.HTTP_200_OK)
-async def update_user_email(user_id: UUID, new_email: EmailStr, session: AsyncSession = Depends(get_db)):
+async def update_user_email(user_id: UUID, new_email: EmailStrSchema, session: AsyncSession = Depends(get_db)):
     user = await session.get(models.User, user_id)
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    user.email = new_email
+    user.email = new_email.email
     user.email_confirmed = False
     user.email_confirmed_date_time = None
     user.verification_token = await crate_verification_code()

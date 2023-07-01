@@ -3,6 +3,7 @@ from httpx import AsyncClient
 from fastapi.responses import JSONResponse
 from uuid import UUID
 import schemas
+from schemas import EmailStrSchema
 from verify_token import get_current_user
 
 router = APIRouter(tags=['users'])
@@ -42,6 +43,17 @@ async def gateway_update_user(user_id: UUID, user_data: schemas.UserCreateSchema
     try:
         async with AsyncClient() as client:
             response = await client.put(f"http://31.129.97.191:82/users/{user_id}", json=user_data.dict())
+            json_data = response.json()
+            return JSONResponse(content=json_data)
+    except:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
+@router.put("/api/users/update/email/{user_id}", status_code=status.HTTP_200_OK)
+async def gateway_update_user_email(user_id: UUID, user_email: EmailStrSchema):
+    try:
+        async with AsyncClient() as client:
+            response = await client.put(f"http://31.129.97.191:82/users/update/email/{user_id}", json=user_email.dict())
             json_data = response.json()
             return JSONResponse(content=json_data)
     except:

@@ -39,3 +39,7 @@ class Login(BaseModel):
 
 class VerifyEmailCode(BaseModel):
     verification_token: str
+
+
+class EmailStrSchema(BaseModel):
+    email: EmailStr

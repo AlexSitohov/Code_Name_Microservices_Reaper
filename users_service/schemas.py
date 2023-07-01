@@ -49,3 +49,7 @@ class VerifyEmailCode(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class EmailStrSchema(BaseModel):
+    email: EmailStr
