@@ -26,5 +26,5 @@ archive.zip
 .*.sw?
 
 #.env
-mails_service/.env
-users_service/.env
+*/.env
+

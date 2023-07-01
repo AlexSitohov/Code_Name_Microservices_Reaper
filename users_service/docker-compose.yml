@@ -43,6 +43,9 @@ services:
       - "82:8080"
     environment:
       - RABBIT_MQ_ADDRESS=$RABBIT_MQ_ADDRESS
+      - SECRET_KEY=$SECRET_KEY
+      - ALGORITHM=$ALGORITHM
+      - ACCESS_TOKEN_EXPIRE_MINUTES=$ACCESS_TOKEN_EXPIRE_MINUTES
     depends_on:
       - db
       - db_test

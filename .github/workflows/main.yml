@@ -28,6 +28,9 @@ jobs:
         run: docker-compose -p users -f users_service/docker-compose.yml up -d --build
         env:
           RABBIT_MQ_ADDRESS: ${{ secrets.RABBIT_MQ_ADDRESS }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ALGORITHM: ${{ secrets.ALGORITHM }}
+          ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
 
       - name: Alembic_migration
         run: docker exec users_app alembic upgrade head
@@ -48,6 +51,10 @@ jobs:
 
       - name: Build_auth
         run: docker-compose -p auth -f auth_service/docker-compose.yml up -d --build
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ALGORITHM: ${{ secrets.ALGORITHM }}
+          ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
 
       # api gateway
 
@@ -62,6 +69,10 @@ jobs:
 
       - name: Build_api_gateway
         run: docker-compose -p api_gateway -f api_gateway/docker-compose.yml up -d --build
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ALGORITHM: ${{ secrets.ALGORITHM }}
+          ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
 
       # mails
 

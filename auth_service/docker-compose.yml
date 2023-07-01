@@ -8,4 +8,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "81:8080"
+    environment:
+      - SECRET_KEY=$SECRET_KEY
+      - ALGORITHM=$ALGORITHM
+      - ACCESS_TOKEN_EXPIRE_MINUTES=$ACCESS_TOKEN_EXPIRE_MINUTES
+
+
+
 
