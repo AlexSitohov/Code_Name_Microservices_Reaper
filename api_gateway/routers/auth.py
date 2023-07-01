@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi import APIRouter, Request, Depends, HTTPException, status
 from httpx import AsyncClient
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
@@ -8,7 +8,7 @@ from verify_token import get_current_user
 router = APIRouter(tags=['auth'])
 
 
-@router.get("/api/auth/ping")
+@router.get("/api/auth/ping", status_code=status.HTTP_200_OK)
 async def gateway_auth_microservice_ping(request: Request):
     async with AsyncClient() as client:
         response = await client.get("http://31.129.97.191:81/")
@@ -27,7 +27,7 @@ async def gateway_auth_login(login_data: OAuth2PasswordRequestForm = Depends()):
         return JSONResponse(content=json_data)
 
 
-@router.get("/api/auth/auth_ping")
+@router.get("/api/auth/auth_ping", status_code=status.HTTP_200_OK)
 async def auth_ping(request: Request, current_user=Depends(get_current_user)):
     async with AsyncClient() as client:
         response = await client.get("http://31.129.97.191:81/auth_ping",
